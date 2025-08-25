@@ -26,9 +26,13 @@ public class Handler {
                 .flatMap(validador::validar)
                 .map(mapper::toModel)
                 .flatMap(crearUsuarioUseCase::guardar)
-                .flatMap(guardarUsuario -> ServerResponse.ok()
+                .map(mapper::toResponse)
+                .doOnSuccess(responseDTO -> {
+                    log.info("Usuario guardado con exito : {}", responseDTO);
+                })
+                .flatMap(response -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(guardarUsuario)
+                        .bodyValue(response)
                 )
                 .doOnError(e -> log.error("Error al guardar usuario : {}", e.getMessage()));
     }

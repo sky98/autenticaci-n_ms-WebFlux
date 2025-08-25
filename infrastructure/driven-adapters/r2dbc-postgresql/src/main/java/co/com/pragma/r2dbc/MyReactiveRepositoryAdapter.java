@@ -7,6 +7,7 @@ import co.com.pragma.r2dbc.helper.ReactiveAdapterOperations;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -18,14 +19,18 @@ public class MyReactiveRepositoryAdapter extends ReactiveAdapterOperations<
         MyReactiveRepository
 > implements UsuarioRepository {
 
-    public MyReactiveRepositoryAdapter(MyReactiveRepository repository, ObjectMapper mapper) {
+    private final TransactionalOperator transactionalOperator;
+
+    public MyReactiveRepositoryAdapter(MyReactiveRepository repository, ObjectMapper mapper, TransactionalOperator transactionalOperator) {
         super(repository, mapper, UsuarioEntity -> mapper.map(UsuarioEntity, Usuario.class));
+        this.transactionalOperator = transactionalOperator;
     }
 
     @Override
     public Mono<Usuario> guardar(Usuario usuario) {
-        return super.save(usuario)
-                .doOnNext(modelo -> log.info("Usuario registrado con exito : {}", modelo));
+        return transactionalOperator.execute(
+                status -> super.save(usuario)
+                ).singleOrEmpty();
     }
 
     @Override
