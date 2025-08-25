@@ -31,7 +31,7 @@ public class MyReactiveRepositoryAdapter extends ReactiveAdapterOperations<
     @Override
     public Mono<Boolean> existeCorreoElectronico(String correoElectronico) {
         return repository.existsByCorreoElectronico(correoElectronico)
-                .doOnNext(existe -> log.info("Existe correo en el sistema : {}", existe));
+                .doOnNext(existe -> log.info("Existe correo : {} en el sistema : {}", correoElectronico, existe));
     }
 
 

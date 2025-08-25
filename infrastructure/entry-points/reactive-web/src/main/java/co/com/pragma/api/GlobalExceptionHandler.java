@@ -1,6 +1,7 @@
 package co.com.pragma.api;
 
 import co.com.pragma.api.errores.ErrorValidacion;
+import co.com.pragma.model.usuario.errores.ApplicationError;
 import co.com.pragma.model.usuario.errores.ErrorDominio;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,8 +27,8 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
     public GlobalExceptionHandler(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
         this.handlers = Map.of(
-                ErrorValidacion.class, this::handleErrorValidacion,
-                ErrorDominio.class, this::handleErrorDominio
+                ErrorValidacion.class, this::handleApplicationError,
+                ErrorDominio.class, this::handleApplicationError
         );
     }
 
@@ -42,25 +43,20 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
         response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
-        return writeResponse(response, HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", "An unexpected error occurred");
+        return writeResponse(response, HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", "Ha ocurrido un error inesperado");
     }
 
-    private Mono<Void> handleErrorValidacion(ServerWebExchange exchange, Throwable ex) {
-        ErrorValidacion errorValidacion = (ErrorValidacion) ex;
+    private Mono<Void> handleApplicationError(ServerWebExchange exchange, Throwable ex) {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(HttpStatus.BAD_REQUEST);
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
-        return writeResponse(response, HttpStatus.BAD_REQUEST, errorValidacion.getMessage(), errorValidacion.getCampos());
-    }
+        Set<String> errors = Set.of("Ha ocurrido un error inesperado en el sistema");
 
-    private Mono<Void> handleErrorDominio(ServerWebExchange exchange, Throwable ex) {
-        ErrorDominio errorDominio = (ErrorDominio) ex;
-        ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(HttpStatus.BAD_REQUEST);
-        response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+        if (ex instanceof ApplicationError)
+            errors = ((ApplicationError) ex).getCampos();
 
-        return writeResponse(response, HttpStatus.BAD_REQUEST, errorDominio.getMessage(), errorDominio.getCampos());
+        return writeResponse(response, HttpStatus.BAD_REQUEST, ex.getMessage(), errors);
     }
 
 
