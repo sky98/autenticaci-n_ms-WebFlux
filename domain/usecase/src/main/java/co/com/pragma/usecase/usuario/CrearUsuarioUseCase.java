@@ -16,7 +16,7 @@ public class CrearUsuarioUseCase {
     public Mono<Usuario> guardar(Usuario usuario){
         return repository.existeCorreoElectronico(usuario.getCorreoElectronico())
                 .flatMap(existe -> existe
-                        ? Mono.error(new ErrorDominio("Correo no esta disponible", Set.of("correo_electronico")))
+                        ? Mono.error(new ErrorDominio("Correo no esta disponible", Set.of("correoElectronico")))
                         : Mono.just(usuario))
                 .flatMap(repository::guardar);
     }
