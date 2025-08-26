@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Builder
 public record UsuarioDTO(
         Long usuarioId,
+        Long documentoId,
         String nombres,
         String apellidos,
         LocalDate fechaNacimiento,

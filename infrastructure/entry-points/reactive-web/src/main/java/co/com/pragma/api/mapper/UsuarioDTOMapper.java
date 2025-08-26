@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UsuarioDTOMapper {
     @Mapping(target = "usuarioId", ignore = true)
+    @Mapping(target = "documentoId", source = "documentoId")
     @Mapping(target = "estado", constant = "ACTIVO")
     Usuario toModel(CrearUsuarioDTO crearUsuarioDTO);
     UsuarioDTO toResponse(Usuario usuario);

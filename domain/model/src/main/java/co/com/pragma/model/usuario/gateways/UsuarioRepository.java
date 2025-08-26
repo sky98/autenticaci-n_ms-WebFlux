@@ -7,5 +7,7 @@ public interface UsuarioRepository {
 
     Mono<Usuario> guardar(Usuario usuario);
     Mono<Boolean> existeCorreoElectronico(String correoElectronico);
+    Mono<Boolean> existeUsuarioPorDocumentoActivo(Long documentoId);
+    Mono<Boolean> existeUsuarioPorDocumento(Long documentoId);
 
 }

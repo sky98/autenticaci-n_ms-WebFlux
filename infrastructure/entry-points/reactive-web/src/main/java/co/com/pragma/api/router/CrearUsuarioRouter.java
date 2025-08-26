@@ -69,7 +69,7 @@ public class CrearUsuarioRouter {
                     }
             )
     )
-    public RouterFunction<ServerResponse> usuarioRouterFunction() {
+    public RouterFunction<ServerResponse> crearUsuarioRouterFunction() {
         return RouterFunctions.route(POST(PATH).and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), handler::guardarUsuario);
     }
 }

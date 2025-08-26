@@ -23,6 +23,8 @@ public class UsuarioEntity {
     @Id
     @Column("usuario_id")
     private Long usuarioId;
+    @Column("documento_id")
+    private Long documentoId;
     private String nombres;
     private String apellidos;
     @Column("fecha_nacimiento")

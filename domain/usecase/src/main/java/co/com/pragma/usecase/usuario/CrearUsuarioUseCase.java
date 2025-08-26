@@ -14,11 +14,18 @@ public class CrearUsuarioUseCase {
     private final UsuarioRepository repository;
 
     public Mono<Usuario> guardar(Usuario usuario){
-        return repository.existeCorreoElectronico(usuario.getCorreoElectronico())
-                .flatMap(existe -> existe
-                        ? Mono.error(new ErrorDominio("Correo no esta disponible", Set.of("correoElectronico")))
-                        : Mono.just(usuario))
+        return validarExistencia(usuario)
                 .flatMap(repository::guardar);
+    }
+
+    private Mono<Usuario> validarExistencia(Usuario usuario) {
+        return repository.existeUsuarioPorDocumento(usuario.getDocumentoId())
+                .flatMap(existeDocumento -> existeDocumento
+                        ? Mono.error(new ErrorDominio("Documento ya está registrado", Set.of("documentoId")))
+                        : repository.existeCorreoElectronico(usuario.getCorreoElectronico()))
+                .flatMap(existeCorreo -> existeCorreo
+                        ? Mono.error(new ErrorDominio("Correo no está disponible", Set.of("correoElectronico")))
+                        : Mono.just(usuario));
     }
 
 }

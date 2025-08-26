@@ -16,6 +16,7 @@ import java.time.LocalDate;
 public class Usuario {
 
     private Long usuarioId;
+    private Long documentoId;
     private String nombres;
     private String apellidos;
     private LocalDate fechaNacimiento;

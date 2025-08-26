@@ -2,6 +2,7 @@ package co.com.pragma.api;
 
 import co.com.pragma.api.dto.request.CrearUsuarioDTO;
 import co.com.pragma.api.mapper.UsuarioDTOMapper;
+import co.com.pragma.usecase.consultarusuario.ConsultarUsuarioUseCase;
 import co.com.pragma.usecase.usuario.CrearUsuarioUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import reactor.core.publisher.Mono;
 public class Handler {
 
     private final CrearUsuarioUseCase crearUsuarioUseCase;
+    private final ConsultarUsuarioUseCase consultarUsuarioUseCase;
     private final UsuarioDTOMapper mapper;
     private final ValidadorRequest validador;
 
@@ -35,5 +37,16 @@ public class Handler {
                         .bodyValue(response)
                 )
                 .doOnError(e -> log.error("Error al guardar usuario : {}", e.getMessage()));
+    }
+
+    public Mono<ServerResponse> existeUsuarioPorDocumento(ServerRequest serverRequest){
+        String documentoId = serverRequest.pathVariable("documentoId");
+        log.info("Iniciando flujo de consultar usuario por documentoId : {}", documentoId);
+        return consultarUsuarioUseCase.existeUsuarioPorDocumentoActivo(Long.valueOf(documentoId))
+                .flatMap(
+                        existe -> ServerResponse.ok()
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .bodyValue("{\"existe\": " + existe + "}")
+                );
     }
 }

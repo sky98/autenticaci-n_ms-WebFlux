@@ -1,6 +1,7 @@
 package co.com.pragma.r2dbc;
 
 import co.com.pragma.model.usuario.Usuario;
+import co.com.pragma.model.usuario.UsuarioEstado;
 import co.com.pragma.model.usuario.gateways.UsuarioRepository;
 import co.com.pragma.r2dbc.entity.UsuarioEntity;
 import co.com.pragma.r2dbc.helper.ReactiveAdapterOperations;
@@ -37,6 +38,18 @@ public class MyReactiveRepositoryAdapter extends ReactiveAdapterOperations<
     public Mono<Boolean> existeCorreoElectronico(String correoElectronico) {
         return repository.existsByCorreoElectronico(correoElectronico)
                 .doOnNext(existe -> log.info("Existe correo : {} en el sistema : {}", correoElectronico, existe));
+    }
+
+    @Override
+    public Mono<Boolean> existeUsuarioPorDocumentoActivo(Long documentoId) {
+        return repository.existsByDocumentoIdAndEstado(documentoId, UsuarioEstado.ACTIVO)
+                .doOnNext(resp ->log.info("Existe y esta activo usuario con documentoId : {} : {}", documentoId, resp));
+    }
+
+    @Override
+    public Mono<Boolean> existeUsuarioPorDocumento(Long documentoId) {
+        return repository.existsByDocumentoId(documentoId)
+                .doOnNext(resp -> log.info("Existe usuario con documentoId {} : {}", documentoId, resp));
     }
 
 
