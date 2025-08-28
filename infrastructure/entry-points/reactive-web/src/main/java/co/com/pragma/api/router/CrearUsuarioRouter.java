@@ -51,7 +51,7 @@ public class CrearUsuarioRouter {
                     ),
                     responses = {
                             @ApiResponse(
-                                    responseCode = "200",
+                                    responseCode = "201",
                                     description = "Usuario guardado exitosamente",
                                     content = @Content(schema = @Schema(implementation = UsuarioDTO.class))
                             ),

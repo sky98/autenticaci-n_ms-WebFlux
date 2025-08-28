@@ -22,7 +22,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 @RequiredArgsConstructor
 public class ConsultarUsuarioRouter {
 
-    public static final String PATH = "/api/v1/usuarios/documento/{documentoId}";
+    public static final String PATH = "/api/v1/usuarios/documento/{documentoId}/existe";
     private final Handler handler;
 
     @Bean

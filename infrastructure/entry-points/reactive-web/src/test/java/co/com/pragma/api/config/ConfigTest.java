@@ -2,25 +2,42 @@ package co.com.pragma.api.config;
 
 import co.com.pragma.api.Handler;
 import co.com.pragma.api.RouterRest;
+import co.com.pragma.api.ValidadorRequest;
+import co.com.pragma.api.mapper.UsuarioDTOMapper;
+import co.com.pragma.api.router.ConsultarUsuarioRouter;
+import co.com.pragma.api.router.CrearUsuarioRouter;
+import co.com.pragma.usecase.consultarusuario.ConsultarUsuarioUseCase;
+import co.com.pragma.usecase.usuario.CrearUsuarioUseCase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-@ContextConfiguration(classes = {RouterRest.class, Handler.class})
+@ContextConfiguration(classes = {RouterRest.class, Handler.class, CrearUsuarioRouter.class, ConsultarUsuarioRouter.class})
 @WebFluxTest
 @Import({CorsConfig.class, SecurityHeadersConfig.class})
 class ConfigTest {
 
+    private final String BASE_PATH = "/api/v1/usuarios";
+
     @Autowired
     private WebTestClient webTestClient;
+    @MockitoBean
+    private CrearUsuarioUseCase crearUsuarioUseCase;
+    @MockitoBean
+    private ConsultarUsuarioUseCase consultarUsuarioUseCase;
+    @MockitoBean
+    private UsuarioDTOMapper mapper;
+    @MockitoBean
+    private ValidadorRequest validador;
 
     @Test
     void corsConfigurationShouldAllowOrigins() {
-        webTestClient.get()
-                .uri("/api/usecase/path")
+        webTestClient.post()
+                .uri(BASE_PATH)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().valueEquals("Content-Security-Policy",

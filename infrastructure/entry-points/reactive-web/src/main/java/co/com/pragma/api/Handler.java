@@ -4,6 +4,7 @@ import co.com.pragma.api.dto.request.CrearUsuarioDTO;
 import co.com.pragma.api.mapper.UsuarioDTOMapper;
 import co.com.pragma.usecase.consultarusuario.ConsultarUsuarioUseCase;
 import co.com.pragma.usecase.usuario.CrearUsuarioUseCase;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -32,7 +33,7 @@ public class Handler {
                 .doOnSuccess(responseDTO -> {
                     log.info("Usuario guardado con exito : {}", responseDTO);
                 })
-                .flatMap(response -> ServerResponse.ok()
+                .flatMap(response -> ServerResponse.status(HttpResponseStatus.CREATED.code())
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(response)
                 )

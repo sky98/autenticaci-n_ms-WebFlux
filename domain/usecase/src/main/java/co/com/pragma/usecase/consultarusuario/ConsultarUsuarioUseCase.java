@@ -9,7 +9,7 @@ public class ConsultarUsuarioUseCase {
 
     private final UsuarioRepository repository;
 
-    public Mono<Boolean> existeUsuarioPorDocumentoActivo(Long documentoId){
+    public Mono<Boolean> existeUsuarioPorDocumentoActivo(Long documentoId) {
         return repository.existeUsuarioPorDocumentoActivo(documentoId);
     }
 }

@@ -32,6 +32,7 @@ class CrearUsuarioUseCaseTest {
 
     private Usuario usuario = Usuario.builder()
             .usuarioId(1L)
+            .documentoId(1L)
             .nombres("test nombre")
             .apellidos("test apellidos")
             .fechaNacimiento(LocalDate.of(1990, 1, 9))
@@ -46,6 +47,7 @@ class CrearUsuarioUseCaseTest {
     void testGuardar_TodoCorrecto_DebeGuardar(){
         when(repository.existeCorreoElectronico(any(String.class))).thenReturn(Mono.just(false));
         when(repository.guardar(any(Usuario.class))).thenReturn(Mono.just(usuario));
+        when(repository.existeUsuarioPorDocumento(any(Long.class))).thenReturn(Mono.just(false));
 
         Mono<Usuario> resultado = useCase.guardar(usuario);
 
@@ -60,18 +62,38 @@ class CrearUsuarioUseCaseTest {
     @Test
     void testGuardar_CorreoYaExiste_DebeLanzarErrorDominio() {
         when(repository.existeCorreoElectronico(any(String.class))).thenReturn(Mono.just(true));
+        when(repository.existeUsuarioPorDocumento(any(Long.class))).thenReturn(Mono.just(false));
 
         Mono<Usuario> resultado = useCase.guardar(usuario);
 
         StepVerifier.create(resultado)
                 .expectErrorMatches(throwable ->
                         throwable instanceof ErrorDominio &&
-                                throwable.getMessage().equals("Correo no esta disponible") &&
+                                throwable.getMessage().equals("Correo no está disponible") &&
                                 ((ErrorDominio) throwable).getCampos().equals(Set.of("correoElectronico"))
                 )
                 .verify();
 
         verify(repository).existeCorreoElectronico(usuario.getCorreoElectronico());
+        verify(repository, never()).guardar(any(Usuario.class));
+    }
+
+    @Test
+    void testGuardar_DocumentoIdYaExiste_DebeLanzarErrorDominio() {
+        when(repository.existeUsuarioPorDocumento(any(Long.class))).thenReturn(Mono.just(true));
+
+
+        Mono<Usuario> resultado = useCase.guardar(usuario);
+
+        StepVerifier.create(resultado)
+                .expectErrorMatches(throwable ->
+                        throwable instanceof ErrorDominio &&
+                                throwable.getMessage().equals("Documento ya está registrado") &&
+                                ((ErrorDominio) throwable).getCampos().equals(Set.of("documentoId"))
+                )
+                .verify();
+
+        verify(repository).existeUsuarioPorDocumento(usuario.getDocumentoId());
         verify(repository, never()).guardar(any(Usuario.class));
     }
 
