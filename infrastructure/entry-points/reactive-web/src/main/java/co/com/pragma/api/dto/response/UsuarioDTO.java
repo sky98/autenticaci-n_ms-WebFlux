@@ -16,5 +16,6 @@ public record UsuarioDTO(
         String telefono,
         String correoElectronico,
         BigDecimal salarioBase,
-        String estado
+        String estado,
+        Long rolId
 ) {}

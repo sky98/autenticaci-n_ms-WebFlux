@@ -4,7 +4,7 @@ import co.com.pragma.model.usuario.Usuario;
 import co.com.pragma.model.usuario.UsuarioEstado;
 import co.com.pragma.model.usuario.gateways.UsuarioRepository;
 import co.com.pragma.r2dbc.entity.UsuarioEntity;
-import co.com.pragma.r2dbc.errores.ErrorPersistencia;
+import co.com.pragma.model.usuario.errores.ErrorPersistencia;
 import co.com.pragma.r2dbc.helper.ReactiveAdapterOperations;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivecommons.utils.ObjectMapper;
@@ -34,7 +34,10 @@ public class UsuarioReactiveRepositoryAdapter extends ReactiveAdapterOperations<
     public Mono<Usuario> guardar(Usuario usuario) {
         return transactionalOperator.execute(
                 status -> super.save(usuario)
-                ).singleOrEmpty();
+                ).singleOrEmpty()
+                .onErrorResume(e ->
+                        Mono.error(new ErrorPersistencia("Ocurrio un error al guardar usuario ", Set.of(e.getMessage())))
+                );
     }
 
     @Override
@@ -47,9 +50,9 @@ public class UsuarioReactiveRepositoryAdapter extends ReactiveAdapterOperations<
     public Mono<Boolean> existeUsuarioPorDocumentoActivo(Long documentoId) {
         return repository.existsByDocumentoIdAndEstado(documentoId, UsuarioEstado.ACTIVO)
                 .doOnNext(resp ->log.info("Existe y esta activo usuario con documentoId : {} : {}", documentoId, resp))
-                .doOnError(e -> {
+                .onErrorResume(e -> {
                     log.error("Error al consultar usuario activo por documento , error : {}", e.getMessage());
-                    throw new ErrorPersistencia("Error al consultar en la tabla usuarios", Set.of("usuario:existeUsuarioPorDocumentoActivo"));
+                    return Mono.error(new ErrorPersistencia("Error al consultar en la tabla usuarios", Set.of("usuario:existeUsuarioPorDocumentoActivo")));
                 });
     }
 

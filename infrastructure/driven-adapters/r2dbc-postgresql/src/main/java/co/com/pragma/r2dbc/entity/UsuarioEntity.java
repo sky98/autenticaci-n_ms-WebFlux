@@ -36,5 +36,7 @@ public class UsuarioEntity {
     @Column("salario_base")
     private BigDecimal salarioBase;
     private String estado;
-
+    private String contrasena;
+    @Column("rol_id")
+    private Long rolId;
 }

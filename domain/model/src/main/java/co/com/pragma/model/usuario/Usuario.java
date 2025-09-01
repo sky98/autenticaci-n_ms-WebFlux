@@ -25,5 +25,7 @@ public class Usuario {
     private String correoElectronico;
     private BigDecimal salarioBase;
     private UsuarioEstado estado;
+    private String contrasena;
+    private Long rolId;
 
 }
