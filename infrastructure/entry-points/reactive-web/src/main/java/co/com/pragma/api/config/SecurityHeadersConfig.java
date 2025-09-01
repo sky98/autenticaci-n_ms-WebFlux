@@ -20,6 +20,7 @@ import reactor.core.publisher.Mono;
 public class SecurityHeadersConfig /*implements WebFilter*/ {
 
     public final String PATH_CREAR_USUARIO = "/api/v1/usuarios";
+    public final String PATH_LOGIN = "/api/v1/login";
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
@@ -27,6 +28,7 @@ public class SecurityHeadersConfig /*implements WebFilter*/ {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(
+                                PATH_LOGIN,
                                 PATH_CREAR_USUARIO
                         ).permitAll()
                         .anyExchange().authenticated()

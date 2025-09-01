@@ -8,5 +8,5 @@ public interface UsuarioRepository {
     Mono<Boolean> existeCorreoElectronico(String correoElectronico);
     Mono<Boolean> existeUsuarioPorDocumentoActivo(Long documentoId);
     Mono<Boolean> existeUsuarioPorDocumento(Long documentoId);
-
+    Mono<Usuario> obtenerPorCorreo(String correo);
 }

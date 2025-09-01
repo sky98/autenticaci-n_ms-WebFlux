@@ -62,5 +62,11 @@ public class UsuarioReactiveRepositoryAdapter extends ReactiveAdapterOperations<
                 .doOnNext(resp -> log.info("Existe usuario con documentoId {} : {}", documentoId, resp));
     }
 
+    @Override
+    public Mono<Usuario> obtenerPorCorreo(String correo) {
+        return repository.findByCorreoElectronico(correo)
+                .onErrorResume(e -> Mono.error(new ErrorPersistencia("Error al obtener usuario por correo", Set.of(e.getMessage()))));
+    }
+
 
 }

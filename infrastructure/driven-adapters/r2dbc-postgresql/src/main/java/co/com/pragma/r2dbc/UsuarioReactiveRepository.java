@@ -1,5 +1,6 @@
 package co.com.pragma.r2dbc;
 
+import co.com.pragma.model.usuario.Usuario;
 import co.com.pragma.model.usuario.UsuarioEstado;
 import co.com.pragma.r2dbc.entity.UsuarioEntity;
 import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor;
@@ -11,4 +12,5 @@ public interface UsuarioReactiveRepository extends ReactiveCrudRepository<Usuari
     Mono<Boolean> existsByCorreoElectronico(String correoElectronico);
     Mono<Boolean> existsByDocumentoIdAndEstado(Long documentoId, UsuarioEstado usuarioEstado);
     Mono<Boolean> existsByDocumentoId(Long documentoId);
+    Mono<Usuario> findByCorreoElectronico(String correoElectronico);
 }

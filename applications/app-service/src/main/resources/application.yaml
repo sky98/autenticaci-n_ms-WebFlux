@@ -20,6 +20,11 @@ management:
 cors:
   allowed-origins: "http://localhost:4200,http://localhost:8080"
 
+jwt:
+  secret: "32861309d0ee10f5f0620a62f2141babd5de56b7b2cb114d035b7e6e4b28ab3c5e811eb1760ca4ed906e36497c5193b4d935f59cd996ed11528713f5710d5481"
+  expiration:
+    millis: 3600000
+
 adapters:
   r2dbc:
     host: "localhost"
