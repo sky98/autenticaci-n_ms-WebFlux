@@ -1,0 +1,18 @@
+package co.com.pragma.model.usuario.errores;
+
+import java.util.Set;
+
+public class ErrorAutenticacion extends RuntimeException implements ApplicationError {
+
+    private Set<String> campos;
+
+    public ErrorAutenticacion(String mensaje, Set<String> campos) {
+        super(mensaje);
+        this.campos = campos;
+    }
+
+    @Override
+    public Set<String> getCampos() {
+        return campos;
+    }
+}

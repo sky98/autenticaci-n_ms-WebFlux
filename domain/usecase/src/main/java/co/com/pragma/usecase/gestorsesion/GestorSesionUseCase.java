@@ -24,7 +24,7 @@ public class GestorSesionUseCase {
                         .map(isValid -> usuario)
                         .switchIfEmpty(Mono.error(new ErrorDominio("Credenciales invalidas", Set.of("Login:invalid"))))
                 )
-                .flatMap(usuario -> jwtUtilsPort.generarToken(usuario.getCorreoElectronico(), usuario.getRolId()));
+                .flatMap(usuario -> jwtUtilsPort.generarToken(usuario.getCorreoElectronico(), usuario.getRolId(), usuario.getDocumentoId()));
     }
 
 }
