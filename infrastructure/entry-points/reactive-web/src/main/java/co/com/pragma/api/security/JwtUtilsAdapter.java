@@ -36,9 +36,9 @@ public class JwtUtilsAdapter implements JwtUtilsPort {
     public Mono<String> generarToken(String claim, Long rolId, Long documentoId) {
         log.info("Generando token.");
         return Mono.fromCallable(() -> Jwts.builder()
-                .subject(claim)
+                .subject(String.valueOf(documentoId))
                 .claim("rolId", rolId)
-                .claim("documentId", documentoId)
+                .claim("correoElectronico", claim)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + jwtExpirationMillis))
                 .signWith(jwtSecretKey())
