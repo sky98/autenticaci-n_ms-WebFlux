@@ -1,4 +1,4 @@
-package co.com.pragma.api.security;
+package co.com.pragma.api.handlers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

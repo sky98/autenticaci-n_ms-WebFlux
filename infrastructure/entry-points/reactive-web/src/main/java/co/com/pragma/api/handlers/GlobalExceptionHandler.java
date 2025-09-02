@@ -1,4 +1,4 @@
-package co.com.pragma.api;
+package co.com.pragma.api.handlers;
 
 import co.com.pragma.api.errores.ErrorValidacion;
 import co.com.pragma.model.usuario.errores.ApplicationError;

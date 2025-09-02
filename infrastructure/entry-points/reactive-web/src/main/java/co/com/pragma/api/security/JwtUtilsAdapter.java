@@ -56,6 +56,15 @@ public class JwtUtilsAdapter implements JwtUtilsPort {
                 .getSubject());
     }
 
+    public Mono<Claims> getClaimsOutAutenticateToken(String token){
+        return Mono.just(token)
+                .flatMap(t -> Mono.just(Jwts.parser()
+                        .setSigningKey(jwtSecretKey())
+                        .build()
+                        .parseClaimsJws(t)
+                        .getBody()));
+    }
+
     public Claims getClaimsFromToken(String token) {
         log.info("Obteniendo username del token");
         return Jwts.parser()

@@ -1,6 +1,6 @@
 package co.com.pragma.api.router;
 
-import co.com.pragma.api.Handler;
+import co.com.pragma.api.handlers.Handler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

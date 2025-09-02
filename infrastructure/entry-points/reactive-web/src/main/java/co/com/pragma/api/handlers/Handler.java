@@ -1,5 +1,6 @@
-package co.com.pragma.api;
+package co.com.pragma.api.handlers;
 
+import co.com.pragma.api.ValidadorRequest;
 import co.com.pragma.api.dto.request.CrearUsuarioDTO;
 import co.com.pragma.api.dto.request.LoginRequest;
 import co.com.pragma.api.dto.response.LoginResponse;
@@ -11,6 +12,7 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -27,6 +29,7 @@ public class Handler {
     private final UsuarioDTOMapper mapper;
     private final ValidadorRequest validador;
 
+    @PreAuthorize("hasRole('1') or hasRole('2')")
     public Mono<ServerResponse> guardarUsuario(ServerRequest serverRequest){
         return serverRequest.bodyToMono(CrearUsuarioDTO.class)
                 .doOnNext(dto -> log.info("Iniciando flujo de guardar usuario : {}", dto))
