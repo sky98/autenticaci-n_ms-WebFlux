@@ -6,8 +6,9 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -18,13 +19,18 @@ import java.util.Date;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class JwtUtilsAdapter implements JwtUtilsPort {
 
-    private final SecretKey jwtSecretKey;
 
+    @Value("${jwt.secret}")
+    private String jwtSecret;
     @Value("${jwt.expiration.millis}")
     private Long jwtExpirationMillis;
+
+    public SecretKey jwtSecretKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
 
     @Override
     public Mono<String> generarToken(String claim, Long rolId, Long documentoId) {
@@ -35,7 +41,7 @@ public class JwtUtilsAdapter implements JwtUtilsPort {
                 .claim("documentId", documentoId)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + jwtExpirationMillis))
-                .signWith(jwtSecretKey)
+                .signWith(jwtSecretKey())
                 .compact());
 
     }
@@ -43,7 +49,7 @@ public class JwtUtilsAdapter implements JwtUtilsPort {
     public Mono<String> getUsernameFromToken(String token) {
         log.info("Obteniendo usernme del token");
         return Mono.fromCallable(() -> Jwts.parser()
-                .verifyWith(jwtSecretKey)
+                .verifyWith(jwtSecretKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
@@ -51,37 +57,26 @@ public class JwtUtilsAdapter implements JwtUtilsPort {
     }
 
     public Claims getClaimsFromToken(String token) {
-        log.info("Obteniendo usernme del token");
+        log.info("Obteniendo username del token");
         return Jwts.parser()
-                .verifyWith(jwtSecretKey)
+                .verifyWith(jwtSecretKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
     }
 
-    public Mono<Boolean> validarToken(String authToken) {
-        log.info("validando token");
-        return Mono.just(authToken)
-                .flatMap(token -> {
-                    try {
-                        Jwts.parser()
-                                .verifyWith(jwtSecretKey)
-                                .build()
-                                .parseSignedClaims(token);
-                        return Mono.just(true);
-                    } catch (SignatureException ex) {
-                        log.error("Invalid JWT signature: {}", ex.getMessage());
-                    } catch (MalformedJwtException ex) {
-                        log.error("Malformed JWT token: {}", ex.getMessage());
-                    } catch (ExpiredJwtException ex) {
-                        log.error("The JWT token has expired: {}", ex.getMessage());
-                    } catch (UnsupportedJwtException ex) {
-                        log.error("The JWT token is not supported: {}", ex.getMessage());
-                    } catch (IllegalArgumentException ex) {
-                        log.error("The JWT claims string is empty: {}", ex.getMessage());
-                    }
-                    return Mono.just(false);
-                });
+    private Boolean isTokenExpired(String token) {
+        try {
+            Date expiration = getClaimsFromToken(token).getExpiration();
+            return expiration.before(new Date());
+        } catch (ExpiredJwtException ex) {
+            log.error("The JWT token has expired: {}", ex.getMessage());
+            return true;
+        } catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException ex) {
+            log.error("Invalid JWT token: {}", ex.getMessage());
+            return true;
+        }
     }
+
 
 }

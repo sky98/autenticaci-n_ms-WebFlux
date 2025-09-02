@@ -25,8 +25,7 @@ public class RequestTokenFilter implements WebFilter {
         log.info("Se dispara RequestTokenFilter");
         return extractJwt(exchange)
                 .flatMap(jwt -> authenticateUser(jwt, exchange, chain))
-                .switchIfEmpty(chain.filter(exchange))
-                .onErrorResume(e -> chain.filter(exchange));
+                .switchIfEmpty(chain.filter(exchange));
     }
 
     private Mono<String> extractJwt(ServerWebExchange exchange) {
@@ -42,7 +41,6 @@ public class RequestTokenFilter implements WebFilter {
         log.info("Autenticando usuario en contexto de Spring");
         return jwtUtilsAdapter.getUsernameFromToken(jwt)
                 .doOnSuccess(username -> log.info("Se extrajo con exito el username del token : {}", username))
-                //.filterWhen(jwtUtilsAdapter::validarToken)
                 .flatMap(reactiveUserDetailsService::findByUsername)
                 .flatMap(userDetails -> createAuthenticationAndContinueChain(userDetails, exchange, chain))
                 .switchIfEmpty(chain.filter(exchange));

@@ -34,12 +34,12 @@ public class Handler {
                 .map(mapper::toModel)
                 .flatMap(crearUsuarioUseCase::guardar)
                 .map(mapper::toResponse)
-                .doOnSuccess(responseDTO -> {
-                    log.info("Usuario guardado con exito : {}", responseDTO);
-                })
-                .flatMap(response -> ServerResponse.status(HttpResponseStatus.CREATED.code())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(response)
+                .flatMap(response -> {
+                    log.info("Usuario guardado con exito :{}", response);
+                            return ServerResponse.status(HttpResponseStatus.CREATED.code())
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .bodyValue(response);
+                        }
                 )
                 .doOnError(e -> log.error("Error al guardar usuario : {}", e.getMessage()));
     }
