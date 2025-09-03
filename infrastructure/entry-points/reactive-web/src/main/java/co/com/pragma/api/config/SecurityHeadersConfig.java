@@ -23,6 +23,7 @@ public class SecurityHeadersConfig /*implements WebFilter*/ {
     public String PATH_VALIDAR_USUARIO_POR_DOCUMENTO_ID = "/api/v1/usuarios/documento/{documentoId}/existe";
     public String PATH_LOGIN = "/api/v1/login";
     public String PATH_SWAGGER = "/swagger-ui/**";
+    public String PATH_API_DOCS = "/v3/api-docs/**";
 
     private final RequestTokenFilter requestTokenFilter;
     private final AuthenticationEntryPoint authenticationEntryPoint;
@@ -38,7 +39,8 @@ public class SecurityHeadersConfig /*implements WebFilter*/ {
                         .pathMatchers(
                                 PATH_LOGIN,
                                 PATH_VALIDAR_USUARIO_POR_DOCUMENTO_ID,
-                                PATH_SWAGGER
+                                PATH_SWAGGER,
+                                PATH_API_DOCS
                         ).permitAll()
                         .anyExchange().authenticated()
                 )
