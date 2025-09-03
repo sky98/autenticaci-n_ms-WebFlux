@@ -1,6 +1,6 @@
 package co.com.pragma.api.handlers;
 
-import co.com.pragma.api.errores.ErrorValidacion;
+import co.com.pragma.model.usuario.errores.ErrorValidacion;
 import co.com.pragma.model.usuario.errores.ApplicationError;
 import co.com.pragma.model.usuario.errores.ErrorDominio;
 import co.com.pragma.model.usuario.errores.ErrorPersistencia;

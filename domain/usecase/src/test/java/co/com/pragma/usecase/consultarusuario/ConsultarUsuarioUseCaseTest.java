@@ -35,6 +35,7 @@ public class ConsultarUsuarioUseCaseTest {
         StepVerifier.create(resultado)
                 .expectNext(true)
                 .verifyComplete();
+
         verify(repository, times(1)).existeUsuarioPorDocumentoActivo(DOCUMENTO_ID);
     }
 

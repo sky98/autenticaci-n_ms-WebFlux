@@ -9,4 +9,5 @@ public interface UsuarioRepository {
     Mono<Boolean> existeUsuarioPorDocumentoActivo(Long documentoId);
     Mono<Boolean> existeUsuarioPorDocumento(Long documentoId);
     Mono<Usuario> obtenerPorCorreo(String correo);
+    Mono<Usuario> obtenerPorDocumentoId(Long documentoId);
 }

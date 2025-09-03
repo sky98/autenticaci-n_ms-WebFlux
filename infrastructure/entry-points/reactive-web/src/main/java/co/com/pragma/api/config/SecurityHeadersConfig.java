@@ -19,7 +19,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @RequiredArgsConstructor
 public class SecurityHeadersConfig /*implements WebFilter*/ {
 
-    public String PATH_CREAR_USUARIO = "/api/v1/usuarios";
+    public String PATH_OBTENER_USUARIO_DOCUMENTO_ID = "/api/v1/usuarios/documento/{documentoId}";
     public String PATH_VALIDAR_USUARIO_POR_DOCUMENTO_ID = "/api/v1/usuarios/documento/{documentoId}/existe";
     public String PATH_LOGIN = "/api/v1/login";
     public String PATH_SWAGGER = "/swagger-ui/**";
@@ -37,10 +37,11 @@ public class SecurityHeadersConfig /*implements WebFilter*/ {
                 .authenticationManager(jwtAuthenticateManager)
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(
+                                PATH_SWAGGER,
+                                PATH_API_DOCS,
                                 PATH_LOGIN,
                                 PATH_VALIDAR_USUARIO_POR_DOCUMENTO_ID,
-                                PATH_SWAGGER,
-                                PATH_API_DOCS
+                                PATH_OBTENER_USUARIO_DOCUMENTO_ID
                         ).permitAll()
                         .anyExchange().authenticated()
                 )

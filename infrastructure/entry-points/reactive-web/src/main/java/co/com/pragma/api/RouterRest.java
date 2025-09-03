@@ -3,6 +3,7 @@ package co.com.pragma.api;
 import co.com.pragma.api.router.ConsultarUsuarioRouter;
 import co.com.pragma.api.router.CrearUsuarioRouter;
 import co.com.pragma.api.router.LoginRouter;
+import co.com.pragma.api.router.ObtenerUsuarioRouter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ public class RouterRest {
     private final CrearUsuarioRouter crearUsuarioRouter;
     private final ConsultarUsuarioRouter consultarUsuarioRouter;
     private final LoginRouter loginRouter;
+    private final ObtenerUsuarioRouter obtenerUsuarioRouter;
 
     @Bean
     public RouterFunction<ServerResponse> routerFunction() {
@@ -24,6 +26,7 @@ public class RouterRest {
                 .add(crearUsuarioRouter.crearUsuarioRouterFunction())
                 .add(consultarUsuarioRouter.consultaUsuarioRouterFunction())
                 .add(loginRouter.loginRouterFunction())
+                .add(obtenerUsuarioRouter.obtenerUsuarioRouterFunction())
                 .build();
     }
 }

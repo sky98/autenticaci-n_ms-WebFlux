@@ -7,6 +7,7 @@ import co.com.pragma.api.dto.response.LoginResponse;
 import co.com.pragma.api.mapper.UsuarioDTOMapper;
 import co.com.pragma.usecase.consultarusuario.ConsultarUsuarioUseCase;
 import co.com.pragma.usecase.gestorsesion.GestorSesionUseCase;
+import co.com.pragma.usecase.obtenerusuario.ObtenerUsuarioUseCase;
 import co.com.pragma.usecase.usuario.CrearUsuarioUseCase;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class Handler {
     private final CrearUsuarioUseCase crearUsuarioUseCase;
     private final ConsultarUsuarioUseCase consultarUsuarioUseCase;
     private final GestorSesionUseCase gestorSesionUseCase;
+    private final ObtenerUsuarioUseCase obtenerUsuarioUseCase;
     private final UsuarioDTOMapper mapper;
     private final ValidadorRequest validador;
 
@@ -70,4 +72,19 @@ public class Handler {
                                 .bodyValue(response)
                 );
     }
+
+    public Mono<ServerResponse> obtenerUsuarioPorDocumentoId(ServerRequest serverRequest){
+        return Mono.just(serverRequest.pathVariable("documentoId"))
+                .flatMap(documentoId -> {
+                    log.info("Iniciando flujo de obtener usuario por documento id : {}", documentoId);
+                    return obtenerUsuarioUseCase.obtenerUsuarioPorDocumentoId(Long.valueOf(documentoId));
+                })
+                .map(mapper::toResponse)
+                .flatMap(response -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(response)
+                );
+
+    }
+
 }

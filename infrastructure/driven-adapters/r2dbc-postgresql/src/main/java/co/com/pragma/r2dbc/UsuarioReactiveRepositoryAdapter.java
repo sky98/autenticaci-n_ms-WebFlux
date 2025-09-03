@@ -2,6 +2,7 @@ package co.com.pragma.r2dbc;
 
 import co.com.pragma.model.usuario.Usuario;
 import co.com.pragma.model.usuario.UsuarioEstado;
+import co.com.pragma.model.usuario.errores.ErrorValidacion;
 import co.com.pragma.model.usuario.gateways.UsuarioRepository;
 import co.com.pragma.r2dbc.entity.UsuarioEntity;
 import co.com.pragma.model.usuario.errores.ErrorPersistencia;
@@ -67,6 +68,17 @@ public class UsuarioReactiveRepositoryAdapter extends ReactiveAdapterOperations<
         log.info("Consultando si existe usuario con correo : {}", correo);
         return repository.findByCorreoElectronico(correo)
                 .onErrorResume(e -> Mono.error(new ErrorPersistencia("Error al obtener usuario por correo", Set.of(e.getMessage()))));
+    }
+
+    @Override
+    public Mono<Usuario> obtenerPorDocumentoId(Long documentoId) {
+        return repository.findByDocumentoId(documentoId)
+                .doOnNext(usuario -> log.info("Se obtuvo con exito usuario con documentoId : {}", documentoId))
+                .switchIfEmpty(Mono.error(new ErrorValidacion("Usuario no existe en el sistema", Set.of("No existe usuario con documentoId : "+ documentoId))))
+                .onErrorResume(e -> {
+                    log.error("Ocurrio error al obtener usuario con documentoId : {}", documentoId);
+                    return Mono.error(new ErrorPersistencia("Error al obtener usuario por documentoId", Set.of(e.getMessage())));
+                });
     }
 
 
