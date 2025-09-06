@@ -1,6 +1,6 @@
 package co.com.pragma.api.config;
 
-import co.com.pragma.api.Handler;
+import co.com.pragma.api.handlers.Handler;
 import co.com.pragma.api.RouterRest;
 import co.com.pragma.api.ValidadorRequest;
 import co.com.pragma.api.mapper.UsuarioDTOMapper;

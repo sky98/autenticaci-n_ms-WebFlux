@@ -2,6 +2,7 @@ package co.com.pragma.api;
 
 import co.com.pragma.api.dto.request.CrearUsuarioDTO;
 import co.com.pragma.api.dto.response.UsuarioDTO;
+import co.com.pragma.api.handlers.Handler;
 import co.com.pragma.api.mapper.UsuarioDTOMapper;
 import co.com.pragma.api.router.ConsultarUsuarioRouter;
 import co.com.pragma.api.router.CrearUsuarioRouter;

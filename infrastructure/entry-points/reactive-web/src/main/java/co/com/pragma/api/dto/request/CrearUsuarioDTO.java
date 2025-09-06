@@ -22,15 +22,33 @@ public record CrearUsuarioDTO(
         String documentoId,
         @NotBlank(message = "El campo :apellidos es obligatorio")
         String apellidos,
-        @NotNull(message = "El campo :fecha_nacimiento es obligatorio")
+        @NotNull(message = "El campo :fechaNacimiento es obligatorio")
         LocalDate fechaNacimiento,
         String direccion,
         String telefono,
-        @NotBlank(message = "El campo :correo_electronico es obligatorio")
-        @Email(message = "Formato invalido del campo :correo_electronico")
+        @NotBlank(message = "El campo :correoElectronico es obligatorio")
+        @Email(message = "Formato invalido del campo :correoElectronico")
         String correoElectronico,
-        @NotNull(message = "El campo :salario_base es obligatorio")
-        @DecimalMin(value = "0", inclusive = false, message = "El campo :salari_base debe ser mayor a 0")
-        @DecimalMax(value = "15000000", message = "El campo :salario_base no puede superar 15,000,000")
-        BigDecimal salarioBase
-) {}
+        @NotNull(message = "El campo :salarioBase es obligatorio")
+        @DecimalMin(value = "0", inclusive = false, message = "El campo :salariBase debe ser mayor a 0")
+        @DecimalMax(value = "15000000", message = "El campo :salarioBase no puede superar 15,000,000")
+        BigDecimal salarioBase,
+        @NotBlank(message = "El campo :contrasena es obligatorio")
+        @Size(min = 7, message = "El campo :contrasena debe tener minimo 6 caracteres")
+        String contrasena
+) {
+        @Override
+        public String toString() {
+                return "CrearUsuarioDTO{" +
+                        "nombres='" + nombres + '\'' +
+                        ", documentoId='" + documentoId + '\'' +
+                        ", apellidos='" + apellidos + '\'' +
+                        ", fechaNacimiento=" + fechaNacimiento +
+                        ", direccion='" + direccion + '\'' +
+                        ", telefono='" + telefono + '\'' +
+                        ", correoElectronico='" + correoElectronico + '\'' +
+                        ", salarioBase=" + salarioBase +
+                        ", contrasena='****'" +
+                        '}';
+        }
+}

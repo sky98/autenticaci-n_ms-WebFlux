@@ -1,8 +1,9 @@
-package co.com.pragma.api;
+package co.com.pragma.api.handlers;
 
-import co.com.pragma.api.errores.ErrorValidacion;
+import co.com.pragma.model.usuario.errores.ErrorValidacion;
 import co.com.pragma.model.usuario.errores.ApplicationError;
 import co.com.pragma.model.usuario.errores.ErrorDominio;
+import co.com.pragma.model.usuario.errores.ErrorPersistencia;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
@@ -28,7 +29,8 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
         this.objectMapper = objectMapper;
         this.handlers = Map.of(
                 ErrorValidacion.class, this::handleApplicationError,
-                ErrorDominio.class, this::handleApplicationError
+                ErrorDominio.class, this::handleApplicationError,
+                ErrorPersistencia.class, this::handleApplicationError
         );
     }
 

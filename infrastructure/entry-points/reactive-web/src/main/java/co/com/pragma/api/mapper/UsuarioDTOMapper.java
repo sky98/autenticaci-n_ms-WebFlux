@@ -11,6 +11,7 @@ public interface UsuarioDTOMapper {
     @Mapping(target = "usuarioId", ignore = true)
     @Mapping(target = "documentoId", source = "documentoId")
     @Mapping(target = "estado", constant = "ACTIVO")
+    @Mapping(target = "rolId", constant = "3L")
     Usuario toModel(CrearUsuarioDTO crearUsuarioDTO);
     UsuarioDTO toResponse(Usuario usuario);
 

@@ -1,6 +1,6 @@
 package co.com.pragma.api.router;
 
-import co.com.pragma.api.Handler;
+import co.com.pragma.api.handlers.Handler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
