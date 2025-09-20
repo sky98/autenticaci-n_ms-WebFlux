@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.RouterOperation;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,7 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
 
 @Configuration
@@ -35,13 +37,14 @@ public class CrearUsuarioRouter {
             produces = {
                     MediaType.APPLICATION_JSON_VALUE
             },
-            method = org.springframework.web.bind.annotation.RequestMethod.POST,
+            method = POST,
             beanClass = Handler.class,
             beanMethod = "guardarUsuario",
             operation = @Operation(
                     operationId = "guardarUsuario",
                     tags = {"Usuarios"},
                     summary = "Guarda un nuevo usuario",
+                    description = "Requiere el rol '1' o '2' (administrados - asesor) para acceder a este recurso.",
                     requestBody = @RequestBody(
                             description = "Información del usuario a guardar",
                             required = true,
@@ -49,6 +52,7 @@ public class CrearUsuarioRouter {
                                     schema = @Schema(implementation = CrearUsuarioDTO.class)
                             )
                     ),
+                    security = @SecurityRequirement(name = "Bearer Authentication"),
                     responses = {
                             @ApiResponse(
                                     responseCode = "201",

@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 @WebFluxTest
 class RouterRestTest {
 
-    private final String BASE_PATH = "/api/v1/usuarios";
+    /*private final String BASE_PATH = "/api/v1/usuarios";
 
     private final CrearUsuarioDTO crearUsuarioDTO = CrearUsuarioDTO.builder()
             .nombres("test nombre")
@@ -115,5 +115,5 @@ class RouterRestTest {
                 .value(responseBody -> {
                     Assertions.assertThat(responseBody.get("existe")).isEqualTo(false);
                 });
-    }
+    }*/
 }

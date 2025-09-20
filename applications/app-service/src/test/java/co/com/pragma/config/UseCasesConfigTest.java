@@ -1,5 +1,7 @@
 package co.com.pragma.config;
 
+import co.com.pragma.model.usuario.gateways.GestorCredencialesPort;
+import co.com.pragma.model.usuario.gateways.JwtUtilsPort;
 import co.com.pragma.model.usuario.gateways.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -41,6 +43,12 @@ public class UseCasesConfigTest {
         public UsuarioRepository usuarioRepository(){
             return Mockito.mock(UsuarioRepository.class);
         }
+
+        @Bean
+        public GestorCredencialesPort gestorCredencialesPort() { return Mockito.mock(GestorCredencialesPort.class); }
+
+        @Bean
+        public JwtUtilsPort jwtUtilsPort() { return Mockito.mock(JwtUtilsPort.class); }
     }
 
     static class MyUseCase {

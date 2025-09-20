@@ -27,9 +27,9 @@ jwt:
 
 adapters:
   r2dbc:
-    host: ${AUTH_DB_HOST}
+    host: ${DB_HOST}
     port: ${DB_PORT}
-    database: ${AUTH_DB_NAME}
+    database: ${DB_NAME}
     schema: "public"
     username: ${DB_USER}
     password: ${DB_PASSWORD}
