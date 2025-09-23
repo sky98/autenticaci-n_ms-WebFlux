@@ -7,6 +7,13 @@ spring:
     add-properties: false
   profiles:
     include: null
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+  swagger:
+    paths:
+      swagger-ui: "/swagger-ui.html"
 
 management:
   endpoints:
