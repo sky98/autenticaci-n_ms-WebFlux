@@ -25,6 +25,7 @@ public class SecurityHeadersConfig /*implements WebFilter*/ {
     public String PATH_SWAGGER = "/swagger-ui/**";
     public String PATH_API_DOCS = "/v3/api-docs/**";
     public String PATH_ACTUATOR_HEALTH = "/actuator/health";
+    public String PATH_STATUS = "/status";
 
     private final RequestTokenFilter requestTokenFilter;
     private final AuthenticationEntryPoint authenticationEntryPoint;
@@ -38,6 +39,7 @@ public class SecurityHeadersConfig /*implements WebFilter*/ {
                 .authenticationManager(jwtAuthenticateManager)
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(
+                                PATH_STATUS,
                                 PATH_ACTUATOR_HEALTH,
                                 PATH_SWAGGER,
                                 PATH_API_DOCS,

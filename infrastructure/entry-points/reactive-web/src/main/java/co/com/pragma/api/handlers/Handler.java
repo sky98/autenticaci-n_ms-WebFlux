@@ -87,4 +87,11 @@ public class Handler {
 
     }
 
+    public Mono<ServerResponse> checkHealth(ServerRequest serverRequest){
+        log.info("Iniciando flujo de health check");
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue("{\"status\": \"UP\"}");
+    }
+
 }

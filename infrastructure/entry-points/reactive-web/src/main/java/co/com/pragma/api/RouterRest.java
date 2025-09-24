@@ -1,5 +1,6 @@
 package co.com.pragma.api;
 
+import co.com.pragma.api.router.CheckHealthRouter;
 import co.com.pragma.api.router.ConsultarUsuarioRouter;
 import co.com.pragma.api.router.CrearUsuarioRouter;
 import co.com.pragma.api.router.LoginRouter;
@@ -19,6 +20,7 @@ public class RouterRest {
     private final ConsultarUsuarioRouter consultarUsuarioRouter;
     private final LoginRouter loginRouter;
     private final ObtenerUsuarioRouter obtenerUsuarioRouter;
+    private final CheckHealthRouter checkHealthRouter;
 
     @Bean
     public RouterFunction<ServerResponse> routerFunction() {
@@ -27,6 +29,7 @@ public class RouterRest {
                 .add(consultarUsuarioRouter.consultaUsuarioRouterFunction())
                 .add(loginRouter.loginRouterFunction())
                 .add(obtenerUsuarioRouter.obtenerUsuarioRouterFunction())
+                .add(checkHealthRouter.checkHealthRouterFunction())
                 .build();
     }
 }
